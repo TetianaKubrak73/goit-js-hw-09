@@ -2,7 +2,6 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import Notiflix from 'notiflix';
 
-
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -16,9 +15,6 @@ const options = {
       Notiflix.Notify.failure("Please choose a date in the future");
       return;
     }
-
-    startButton.disabled = false;
-    countdown(selectedDate);
   },
 };
 
@@ -29,21 +25,21 @@ const hoursValue = document.querySelector('[data-hours]');
 const minutesValue = document.querySelector('[data-minutes]');
 const secondsValue = document.querySelector('[data-seconds]');
 
+let intervalId;
+
 flatpickr(datetimePicker, options);
 
-function countdown(targetDate) {
-  const intervalId = setInterval(updateTimer, 1000);
+function startCountdown(targetDate) {
+  clearInterval(intervalId); 
+
+  intervalId = setInterval(updateTimer, 1000);
 
   function updateTimer() {
     const currentDate = new Date();
     const timeDifference = targetDate - currentDate;
 
     if (timeDifference <= 0) {
-      clearInterval(intervalId);
-      daysValue.textContent = "00";
-      hoursValue.textContent = "00";
-      minutesValue.textContent = "00";
-      secondsValue.textContent = "00";
+      clearInterval(intervalId); 
       startButton.disabled = true;
     } else {
       const time = convertMs(timeDifference);
@@ -72,3 +68,12 @@ function convertMs(ms) {
 function addLeadingZero(value) {
   return value.toString().padStart(2, '0');
 }
+
+
+startButton.addEventListener('click', () => {
+  const selectedDate = datetimePicker.selectedDates[0]; 
+
+  if (selectedDate) {
+    startCountdown(selectedDate);
+  }
+});
