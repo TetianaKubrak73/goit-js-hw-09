@@ -71,7 +71,7 @@ function addLeadingZero(value) {
 
 
 startButton.addEventListener('click', () => {
-  const selectedDate = datetimePicker.selectedDates[0]; 
+  const selectedDate = datetimePicker._flatpickr.selectedDates[0]; 
 
   if (selectedDate) {
     startCountdown(selectedDate);
